@@ -665,17 +665,11 @@
 	   <!-- Main Products JavaScript File -->
     <script src="product.js"></script>
 	
+
+
+
 <script>
 // Cart data এবং অন্যান্য ভ্যারিয়েবল ডিক্লেয়ারেশন এখানে থাকবে...
-
-// প্রোডাক্ট স্লাগ জেনারেটর ফাংশন
-function generateSlug(title) {
-    return title.toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim();
-}
 
 // URL হ্যান্ডলিং ফাংশন
 function handleHashChange() {
@@ -686,10 +680,40 @@ function handleHashChange() {
         return;
     }
     
-    const product = products.find(p => generateSlug(p.title) === hash);
+    // Parse the URL parameters
+    const params = new URLSearchParams(hash.split('?')[1] || '');
+    const productSlug = hash.split('?')[0];
+    const color = params.get('color') || null;
+    const size = params.get('size') || null;
+    
+    const product = products.find(p => p.slug === productSlug);
     if (product) {
         selectedProduct = product;
         loadProductDetail(product);
+        
+        // Set selected color and size from URL if available
+        if (color) {
+            selectedColor = color;
+            setTimeout(() => {
+                const colorOption = [...document.querySelectorAll('#color-options .variant-option')]
+                    .find(opt => opt.textContent === color);
+                if (colorOption) colorOption.click();
+                
+                const colorSwatch = [...document.querySelectorAll('.color-swatch')]
+                    .find(sw => sw.title === color);
+                if (colorSwatch) colorSwatch.click();
+            }, 100);
+        }
+        
+        if (size) {
+            selectedSize = size;
+            setTimeout(() => {
+                const sizeOption = [...document.querySelectorAll('#size-options .variant-option')]
+                    .find(opt => opt.textContent === size);
+                if (sizeOption) sizeOption.click();
+            }, 100);
+        }
+        
         switchView('detail');
     } else {
         switchView('products');
@@ -757,6 +781,7 @@ function loadProductDetail(product) {
             document.querySelectorAll('#color-options .variant-option').forEach(o => o.classList.remove('selected'));
             colorOption.classList.add('selected');
             selectedColor = color;
+            updateProductURL();
             
             if (product.colorImages && product.colorImages[color]) {
                 mainImage.src = product.colorImages[color];
@@ -765,6 +790,11 @@ function loadProductDetail(product) {
                 });
             }
         });
+        
+        // If this color is selected from URL, mark it as selected
+        if (color === selectedColor) {
+            colorOption.classList.add('selected');
+        }
         
         colorOptions.appendChild(colorOption);
         
@@ -779,6 +809,7 @@ function loadProductDetail(product) {
                 document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
                 colorSwatch.classList.add('selected');
                 selectedColor = color;
+                updateProductURL();
                 
                 if (product.colorImages && product.colorImages[color]) {
                     mainImage.src = product.colorImages[color];
@@ -787,6 +818,11 @@ function loadProductDetail(product) {
                     });
                 }
             });
+            
+            // If this color is selected from URL, mark it as selected
+            if (color === selectedColor) {
+                colorSwatch.classList.add('selected');
+            }
             
             colorSwatches.appendChild(colorSwatch);
         }
@@ -805,7 +841,13 @@ function loadProductDetail(product) {
             document.querySelectorAll('#size-options .variant-option').forEach(o => o.classList.remove('selected'));
             sizeOption.classList.add('selected');
             selectedSize = size;
+            updateProductURL();
         });
+        
+        // If this size is selected from URL, mark it as selected
+        if (size === selectedSize) {
+            sizeOption.classList.add('selected');
+        }
         
         sizeOptions.appendChild(sizeOption);
     });
@@ -827,14 +869,32 @@ function loadProductDetail(product) {
     setupImageZoom();
 }
 
+// URL আপডেট করার ফাংশন
+function updateProductURL() {
+    if (!selectedProduct) return;
+    
+    const params = new URLSearchParams();
+    if (selectedColor) params.set('color', selectedColor);
+    if (selectedSize) params.set('size', selectedSize);
+    
+    const queryString = params.toString();
+    const newHash = `#${selectedProduct.slug}${queryString ? `?${queryString}` : ''}`;
+    
+    // Update URL without reloading the page
+    window.history.replaceState({}, '', newHash);
+}
+
 // showProductDetail ফাংশন আপডেট করুন
 function showProductDetail(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
     
-    // URL আপডেট করুন
-    const productSlug = generateSlug(product.title);
-    window.history.pushState({ productId }, '', `#${productSlug}`);
+    // Reset selected variants
+    selectedColor = null;
+    selectedSize = null;
+    
+    // Update URL
+    window.history.pushState({ productId }, '', `#${product.slug}`);
     
     // প্রোডাক্ট ডিটেইল লোড করুন
     selectedProduct = product;
