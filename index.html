@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ecommerce Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header-top">
+        <div class="header-top-container">
+            <div class="header-top-left">
+                <a href="#"><i class="fas fa-phone"></i> +880 1724 674681</a>
+                <a href="#"><i class="fas fa-envelope"></i> info@customcapbd.com</a>
+            </div>
+            <div class="header-top-right">
+                <a href="#"><i class="fas fa-truck"></i> Track Order</a>
+                <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+            </div>
+        </div>
+    </div>
+    
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <img src="https://headlookbd.com/custom-cap-bd-logo.png" alt="Custom Cap BD Logo">
+                <div class="logo-text">
+                    <span>Custom Cap BD</span>
+                    <span>Premium Custom Caps</span>
+                </div>
+            </a>
+            
+            <nav class="desktop-menu">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Custom Design</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </nav>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <a href="#" class="logo">Custom Cap BD</a>
+                <button class="close-menu-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mobile-menu-links">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Custom Design</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+        
+        <div class="overlay"></div>
+    </header>
+    
+    <!-- Banner Section -->
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Customize Your Own Cap</h1>
+            <p>Design your perfect cap with our easy-to-use customization tools. Choose from hundreds of designs or create your own!</p>
+            <a href="#" class="banner-btn">Start Designing</a>
+        </div>
+    </div>
+    
+    <!-- Main Content Section -->
+    <main class="main-container">
+        
+        <!-- Products Grid View -->
+        <div class="section-title">
+            <h2>Our Products</h2>
+        </div>
+        
+        <div id="products-view">
+            <div class="products-grid" id="products-grid">
+                <!-- Product cards will be added dynamically -->
+            </div>
+        </div>
+        
+        <!-- Product Detail View -->
+        <div class="product-detail" id="product-detail">
+            <div class="back-to-products" id="back-to-products">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Products</span>
+            </div>
+            
+            <div class="product-detail-container">
+                <div class="product-images">
+                    <div class="main-image-container" id="main-image-container">
+                        <img src="" alt="Product Image" class="main-image" id="detail-main-image">
+                    </div>
+                    <div class="thumbnail-container" id="thumbnail-container">
+                        <!-- Thumbnails will be added dynamically -->
+                    </div>
+                </div>
+                
+                <div class="product-details">
+                    <h2 class="product-detail-title" id="detail-title">Product Title</h2>
+                    
+                    <div class="product-price-container">
+                        <span class="product-detail-price" id="detail-price">৳1200</span>
+                        <span class="product-original-price" id="detail-original-price">৳1500</span>
+                    </div>
+                    
+                    <div class="product-description" id="detail-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.
+                    </div>
+                    
+                    <div class="product-variants">
+                        <div class="variant">
+                            <div class="variant-title">Color:</div>
+                            <div class="variant-options" id="color-options">
+                                <!-- Color options will be added dynamically -->
+                            </div>
+                            <div class="color-swatches" id="color-swatches">
+                                <!-- Color swatches will be added dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div class="variant">
+                            <div class="variant-title">Size:</div>
+                            <div class="variant-options" id="size-options">
+                                <!-- Size options will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quantity-control">
+                        <button class="quantity-btn" id="decrease-qty">-</button>
+                        <input type="number" value="1" min="1" class="quantity-input" id="quantity-input">
+                        <button class="quantity-btn" id="increase-qty">+</button>
+                    </div>
+                    
+                    <div class="product-detail-actions">
+                        <button class="btn btn-primary" id="add-to-cart-detail">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-success" id="buy-now-detail">
+                            <i class="fas fa-bolt"></i> Buy Now
+                        </button>
+                    </div>
+                    
+                    <div class="social-buttons">
+                        <button class="btn btn-whatsapp btn-sm" onclick="window.open('https://wa.me/8801724674681', '_blank')">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button class="btn btn-messenger btn-sm" onclick="window.open('https://m.me/SayfulShahin', '_blank')">
+                            <i class="fab fa-facebook-messenger"></i> Messenger
+                        </button>
+                        <button class="btn btn-call btn-sm" onclick="window.open('tel:+8801724674681')">
+                            <i class="fas fa-phone"></i> Call Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Form in Product Detail -->
+            <div class="checkout-form" id="product-order-form">
+                <div class="checkout-header">
+                    <h2 class="form-title">Order Now</h2>
+                </div>
+                
+                <div class="checkout-body">
+                    <form id="product-customer-form">
+                        <div class="checkout-section">
+                            <h3 class="section-title">Customer Information</h3>
+                            <div class="form-group">
+                                <label for="product-full-name" class="form-label">Full Name:</label>
+                                <input type="text" id="product-full-name" class="form-control" placeholder="এখানে আপনার ফুল নাম লিখুন" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-mobile" class="form-label">Mobile Number:</label>
+                                <input type="tel" id="product-mobile" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-address" class="form-label">Full Address:</label>
+                                <textarea id="product-address" class="form-control" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-district" class="form-label">District:</label>
+                                <input type="text" id="product-district" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-email" class="form-label">Email (optional):</label>
+                                <input type="email" id="product-email" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-section">
+                            <h3 class="section-title">Delivery Options</h3>
+                            <div class="delivery-options">
+                                <div class="delivery-option" id="free-delivery-option" style="display: none;">
+                                    <label class="radio-label">
+                                        <input type="radio" name="product-delivery" value="free" class="radio-input">
+                                        <span style="color: var(--success-color);">Delivery Charge: Free</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="delivery-option">
+                                    <label class="radio-label">
+                                        <input type="radio" name="product-delivery" value="inside" class="radio-input" checked>
+                                        Inside Dhaka Delivery Charge ৳80/-
+                                    </label>
+                                </div>
+                                
+                                <div class="delivery-option">
+                                    <label class="radio-label">
+                                        <input type="radio" name="product-delivery" value="outside" class="radio-input">
+                                        Outside Dhaka Delivery Charge ৳120/-
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-notes" class="form-label">Notes (optional):</label>
+                                <textarea id="product-notes" class="form-control" rows="2"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="order-summary" id="product-order-summary">
+                            <h3 class="summary-title">Order Summary</h3>
+                            <div class="summary-item">
+                                <span>Subtotal:</span>
+                                <span id="product-subtotal">৳0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Delivery Charge:</span>
+                                <span id="product-delivery-charge">৳80</span>
+                            </div>
+                            <div class="summary-total">
+                                <span>Total:</span>
+                                <span id="product-total">৳0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="back-to-detail">
+                                <i class="fas fa-arrow-left"></i> Back to Product
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check"></i> Submit Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="related-products">
+                <h3 class="related-title">Related Products</h3>
+                <div class="related-slider" id="related-slider">
+                    <!-- Related products will be added dynamically -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Checkout Form -->
+        <div class="checkout-form" id="checkout-form">
+            <div class="checkout-header">
+                <h2 class="form-title">Checkout</h2>
+            </div>
+            
+            <div class="checkout-body">
+                <div class="checkout-section">
+                    <h3 class="section-title">Order Items</h3>
+                    <div class="cart-items" id="cart-items">
+                        <!-- Cart items will be added dynamically -->
+                    </div>
+                </div>
+                
+                <form id="customer-form">
+                    <div class="checkout-section">
+                        <h3 class="section-title">Customer Information</h3>
+                        <div class="form-group">
+                            <label for="full-name" class="form-label">Full Name:</label>
+                            <input type="text" id="full-name" class="form-control" placeholder="এখানে আপনার ফুল নাম লিখুন" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mobile" class="form-label">Mobile Number:</label>
+                            <input type="tel" id="mobile" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address" class="form-label">Full Address:</label>
+                            <textarea id="address" class="form-control" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="district" class="form-label">District:</label>
+                            <input type="text" id="district" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email (optional):</label>
+                            <input type="email" id="email" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-section">
+                        <h3 class="section-title">Delivery Options</h3>
+                        <div class="delivery-options">
+                            <div class="delivery-option free-delivery-option" id="cart-free-delivery-option" style="display: none;">
+                                <label class="radio-label">
+                                    <input type="radio" name="delivery" value="free" class="radio-input">
+                                    <span style="color: var(--success-color);">Delivery Charge: Free</span>
+                                </label>
+                            </div>
+                            
+                            <div class="delivery-option">
+                                <label class="radio-label">
+                                    <input type="radio" name="delivery" value="inside" class="radio-input" checked>
+                                    Inside Dhaka Delivery Charge ৳80/-
+                                </label>
+                            </div>
+                            
+                            <div class="delivery-option">
+                                <label class="radio-label">
+                                    <input type="radio" name="delivery" value="outside" class="radio-input">
+                                    Outside Dhaka Delivery Charge ৳120/-
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes" class="form-label">Notes (optional):</label>
+                            <textarea id="notes" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="order-summary" id="order-summary">
+                        <h3 class="summary-title">Order Summary</h3>
+                        <!-- Order items will be added dynamically -->
+                        <div class="summary-item">
+                            <span>Delivery Charge:</span>
+                            <span id="delivery-charge">৳80</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span id="order-total">৳1280</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="clear-cart">
+                            <i class="fas fa-trash"></i> Clear Cart
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Submit Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Order Processing -->
+        <div class="order-processing" id="order-processing">
+            <div class="processing-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="processing-text">Your order is being processed...</div>
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        
+        <!-- Order Confirmation -->
+        <div class="order-confirmation" id="order-confirmation">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="confirmation-title">Order Confirmed!</h2>
+            <p class="confirmation-text">
+                Thank you for your order. We have received it and will process it shortly. 
+                You will receive a confirmation message on your mobile shortly.
+            </p>
+            <div class="confirmation-actions">
+                <button class="btn btn-primary" id="back-to-home">
+                    <i class="fas fa-home"></i> Back to Home
+                </button>
+                <button class="btn btn-success" id="download-invoice">
+                    <i class="fas fa-download"></i> Download Invoice
+                </button>
+            </div>
+        </div>
+        <!-- Features Section -->
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h3>Premium Quality</h3>
+                <p>We use only the highest quality materials to ensure your caps last long and look great.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-truck-fast"></i>
+                </div>
+                <h3>Fast Delivery</h3>
+                <p>Get your custom caps delivered quickly anywhere in Bangladesh within 3-5 business days.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-paintbrush"></i>
+                </div>
+                <h3>Custom Designs</h3>
+                <p>Create your own unique cap design with our easy-to-use customization tools.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>24/7 Support</h3>
+                <p>Our customer service team is always ready to assist you with any questions.</p>
+            </div>
+        </div>	
+<section>
+    <div class="services-container">
+        <div class="service-box">
+            <i class="fas fa-star service-icon"></i>
+            <h3 class="service-title">High Quality Selection</h3>
+            <p class="service-desc">Own Quality Control</p>
+        </div>
+        
+        <div class="service-box">
+            <i class="fas fa-headset service-icon"></i>
+            <h3 class="service-title">Customer Support</h3>
+            <p class="service-desc">With Dedicated Team</p>
+        </div>
+        
+        <div class="service-box">
+            <i class="fas fa-truck service-icon"></i>
+            <h3 class="service-title">Nationwide Delivery</h3>
+            <p class="service-desc">With Special Care</p>
+        </div>
+        
+        <div class="service-box">
+            <i class="fas fa-money-bill-wave service-icon"></i>
+            <h3 class="service-title">Cash On Delivery</h3>
+            <p class="service-desc">And Easy Return</p>
+        </div>
+    </div>		
+</section>		
+    </main>
+    
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <img src="https://headlookbd.com/custom-cap-bd-logo.png" alt="Custom Cap BD Logo">
+                    <div class="footer-logo-text">
+                        <span>Custom Cap BD</span>
+                        <span>Premium Custom Caps</span>
+                    </div>
+                </div>
+                <p>We specialize in creating high-quality custom caps for individuals and businesses. Our products are made with premium materials and attention to detail.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links-container">
+                <h3 class="footer-title">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">Products</a>
+                    <a href="#">Custom Design</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </div>
+            
+            <div class="footer-links-container">
+                <h3 class="footer-title">Categories</h3>
+                <div class="footer-links">
+                    <a href="#">Baseball Caps</a>
+                    <a href="#">Snapback Caps</a>
+                    <a href="#">Trucker Caps</a>
+                    <a href="#">Bucket Hats</a>
+                    <a href="#">Dad Hats</a>
+                    <a href="#">Custom Designs</a>
+                </div>
+            </div>
+            
+            <div class="footer-contact">
+                <h3 class="footer-title">Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Business Street, Dhaka, Bangladesh</p>
+                <p><i class="fas fa-phone"></i> +880 1724 674681</p>
+                <p><i class="fas fa-envelope"></i> info@customcapbd.com</p>
+                <p><i class="fas fa-clock"></i> Open: 9:00 AM - 8:00 PM (Everyday)</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 Custom Cap BD. All Rights Reserved. Developed by <a href="https://headlookbd.com" target="_blank">Headlook BD</a></p>
+        </div>
+    </footer>
+    
+    <!-- Floating Cart -->
+    <div class="floating-cart" id="floating-cart">
+        <span class="cart-count" id="cart-count">0</span>
+        <span>Items in Cart</span>
+        <button class="btn btn-success btn-sm" id="checkout-btn">Checkout</button>
+        <button class="btn btn-secondary btn-sm" id="clear-cart-btn">
+            <i class="fas fa-trash"></i> Clear
+        </button>
+    </div>
+    
+    <!-- Chatbox -->
+    <div class="chatbox">
+        <div class="chatbox-toggle" id="chatbox-toggle">
+            <i class="fas fa-comments"></i>
+            <div class="message-notification" id="message-notification">1</div>
+        </div>
+        <div class="chatbox-message" id="chatbox-message">
+            <button class="close-message" id="close-message"><i class="fas fa-times"></i></button>
+            <p>আপনার কি কোন সাহায্যের প্রয়োজন?</p>
+        </div>
+        <div class="chatbox-content" id="chatbox-content">
+            <div class="chatbox-header">
+                <h3>Customer Support</h3>
+                <button class="chatbox-close" id="chatbox-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbox-body">
+                <p>Hello! How can we help you today?</p>
+            </div>
+            <div class="chatbox-input">
+                <input type="text" id="chatbox-input" placeholder="Type your message...">
+            </div>
+            <div class="chatbox-actions">
+                <button class="chatbox-btn chatbox-btn-whatsapp" id="send-whatsapp">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="chatbox-btn chatbox-btn-messenger" id="send-messenger">
+                    <i class="fab fa-facebook-messenger"></i> Messenger
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Invoice Container -->
+    <div class="invoice-container" id="invoice-container">
+        <div class="invoice" id="invoice">
+            <div class="invoice-header">
+                <div class="invoice-company">
+                    <h2>Custom Cap BD</h2>
+                    <p>123 Business Street, Dhaka</p>
+                    <p>Phone: +880 1724 674681</p>
+                    <p>Email: info@customcapbd.com</p>
+                    <p>Website: www.customcapbd.com</p>
+                </div>
+                <div class="invoice-logo">
+                    <img src="https://headlookbd.com/custom-cap-bd-logo.png" alt="Custom Cap BD Logo">
+                    <p>www.facebook.com/customcapbd</p>
+                </div>
+            </div>
+            
+            <div class="invoice-title">
+                <h1>INVOICE</h1>
+                <div class="invoice-number">Order #<span id="invoice-number">0001</span></div>
+                <div class="invoice-date">Date: <span id="invoice-date">01 Jan 2023</span></div>
+            </div>
+            
+            <div class="invoice-addresses">
+                <div class="invoice-from">
+                    <div class="invoice-section-title">From:</div>
+                    <p>Custom Cap BD</p>
+                    <p>123 Business Street</p>
+                    <p>Dhaka, Bangladesh</p>
+                    <p>Phone: +880 1724 674681</p>
+                    <p>Email: info@customcapbd.com</p>
+                </div>
+                
+                <div class="invoice-to">
+                    <div class="invoice-section-title">Shipping To:</div>
+                    <p id="invoice-customer-name">John Doe</p>
+                    <p id="invoice-customer-address">123 Customer Street, Dhaka</p>
+                    <p id="invoice-customer-district">Dhaka, Bangladesh</p>
+                    <p id="invoice-customer-phone">+880 1712 345678</p>
+                    <p id="invoice-customer-email">customer@example.com</p>
+                </div>
+            </div>
+            
+            <table class="invoice-items">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-items-body">
+                    <!-- Invoice items will be added dynamically -->
+                </tbody>
+            </table>
+            
+            <table class="invoice-totals">
+                <tr>
+                    <td class="total-label">Subtotal:</td>
+                    <td class="total-value" id="invoice-subtotal">৳0.00</td>
+                </tr>
+                <tr>
+                    <td class="total-label">Delivery Charge:</td>
+                    <td class="total-value" id="invoice-delivery">৳0.00</td>
+                </tr>
+                <tr>
+                    <td class="total-label">Total:</td>
+                    <td class="total-value" id="invoice-total">৳0.00</td>
+                </tr>
+            </table>
+            
+            <div class="invoice-footer">
+                <p>Thank you for your Orders!</p>
+                <p>Please check your items before accepting the delivery.</p>
+                <p>For any queries, contact us at +880 1724 674681 or info@customcapbd.com</p>
+            </div>
+            
+            <div class="invoice-actions">
+                <button class="btn btn-secondary" id="close-invoice">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <button class="btn btn-primary" id="print-invoice">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-success" id="save-invoice">
+                    <i class="fas fa-download"></i> Save as PDF
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- External JS Libraries -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Main JavaScript File -->
+    <script src="script.js"></script>
+	
+	   <!-- Main Products JavaScript File -->
+    <script src="product.js"></script>
+	
+<script>
+// Add this at the top of your script.js
+function generateSlug(title) {
+    return title.toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special chars
+        .replace(/\s+/g, '-') // Replace spaces with -
+        .replace(/-+/g, '-') // Replace multiple - with single -
+        .trim();
+}
+
+// Update your products array to include slugs (you can do this in product.js)
+// Example:
+// const products = [
+//     {
+//         id: 1,
+//         title: "Men's Casual T-Shirt",
+//         slug: generateSlug("Men's Casual T-Shirt"),
+//         ...
+//     },
+//     ...
+// ];
+
+// Modify showProductDetail function
+function showProductDetail(productId) {
+    selectedProduct = products.find(p => p.id === productId);
+    if (!selectedProduct) return;
+    
+    // Update URL without reload
+    const productSlug = generateSlug(selectedProduct.title);
+    window.history.pushState({ productId }, '', `#${productSlug}`);
+    
+    // Rest of your existing showProductDetail code...
+    document.getElementById('detail-title').textContent = selectedProduct.title;
+    document.getElementById('detail-price').textContent = `৳${selectedProduct.price}`;
+    // ... continue with the rest of your function
+}
+
+// Add URL handling at initialization
+function init() {
+    renderProducts();
+    setupEventListeners();
+    updateCartCount();
+    setupChatbox();
+    
+    // Check URL hash on load
+    handleHashChange();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+}
+
+function handleHashChange() {
+    const hash = window.location.hash.substring(1); // Remove #
+    
+    if (!hash) {
+        // No hash = show products view
+        switchView('products');
+        return;
+    }
+    
+    // Find product by slug
+    const product = products.find(p => generateSlug(p.title) === hash);
+    if (product) {
+        showProductDetail(product.id);
+    } else {
+        // If no product found, default to products view
+        switchView('products');
+    }
+}
+
+// Update your existing switchView function to maintain the hash
+function switchView(view) {
+    currentView = view;
+    
+    document.getElementById('products-view').style.display = 'none';
+    productDetail.classList.remove('active');
+    checkoutForm.classList.remove('active');
+    orderProcessing.classList.remove('active');
+    orderConfirmation.classList.remove('active');
+    
+    // Hide banner, features and footer sections by default
+    document.querySelector('.banner').style.display = 'none';
+    document.querySelector('.features').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
+    
+    // Chatbox will always remain visible
+    document.querySelector('.chatbox').style.display = 'block';
+    
+    productOrderForm.style.display = 'none';
+    
+    switch (view) {
+        case 'products':
+            document.getElementById('products-view').style.display = 'block';
+            floatingCart.classList.remove('hidden');
+            // Show banner, features and footer only on home/products view
+            document.querySelector('.banner').style.display = 'block';
+            document.querySelector('.features').style.display = 'flex';
+            document.querySelector('footer').style.display = 'block';
+            // Clear hash when showing products view
+            if (window.location.hash) {
+                window.history.pushState({}, '', window.location.pathname);
+            }
+            break;
+        case 'detail':
+            productDetail.classList.add('active');
+            floatingCart.classList.remove('hidden');
+            break;
+        case 'checkout':
+            checkoutForm.classList.add('active');
+            floatingCart.classList.add('hidden');
+            break;
+        case 'processing':
+            orderProcessing.classList.add('active');
+            floatingCart.classList.add('hidden');
+            break;
+        case 'confirmation':
+            orderConfirmation.classList.add('active');
+            floatingCart.classList.add('hidden');
+            break;
+    }
+    
+    window.scrollTo(0, 0);
+}
+</script>
+	
+	
+</body>
+</html>
