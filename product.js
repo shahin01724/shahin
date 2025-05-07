@@ -1,18 +1,18 @@
         // Sample product data with color images and free delivery flag
         const products = [
-            {
-                id: 1,
-                title: "Men's Casual T-Shirt",
-		slug: "mens-casual-tshirt", // Add this line
-                price: 599,
-                originalPrice: 799,
-                image: "https://i.postimg.cc/sxPHbc9t/Black-Color-Cap-6.png",
-                images: [
-                    "https://i.postimg.cc/hvKRvf4c/Cuatomizes-Cap-Black-2.jpg",
-                    "https://i.postimg.cc/QMpXMLgg/Cuatomizes-Cap-Black-3.jpg",
-                    "https://i.postimg.cc/FKcKJkvL/Cuatomizes-Cap-Black-4.jpg",
-                    "https://i.postimg.cc/gJ86dBj1/Cuatomizes-Cap-Black-5.jpg"
-                ],
+                {
+        id: 1,
+        title: "Black Color Cap",
+        slug: "black-color-cap",
+        price: 599,
+        originalPrice: 799,
+        image: "https://i.postimg.cc/sxPHbc9t/Black-Color-Cap-6.png",
+        images: [
+            "https://i.postimg.cc/hvKRvf4c/Cuatomizes-Cap-Black-2.jpg",
+            "https://i.postimg.cc/QMpXMLgg/Cuatomizes-Cap-Black-3.jpg",
+            "https://i.postimg.cc/FKcKJkvL/Cuatomizes-Cap-Black-4.jpg",
+            "https://i.postimg.cc/gJ86dBj1/Cuatomizes-Cap-Black-5.jpg"
+        ],
                 description: "Comfortable and stylish men's casual t-shirt made from 100% cotton. Available in various colors and sizes.",
                 colors: ["Red", "Blue", "Black", "White", "Green"],
                 colorImages: {
@@ -29,24 +29,23 @@
                     "White": "#ffffff",
                     "Green": "Green"
                 },
-                sizes: ["S", "M", "L","XXL","XXL",],
-                stock: 10,
-                deliveryFree: true
-            },
-
-	{
-                id: 2,
-                title: "Men's Casual T-Shirt",
-		slug: "mens-casual-tshirts", // Add this line
-                price: 599,
-                originalPrice: 799,
-                image: "https://i.postimg.cc/Wpf7bxtX/Khaki-Cap-9.png",
-                images: [
-                    "https://i.postimg.cc/dVJ1TV1H/Customizes-Cap-Khaki-2.jpg",
-                    "https://i.postimg.cc/wMTzj7FL/Customizes-Cap-Khaki-3.jpg",
-                    "https://i.postimg.cc/FzRtQwsx/Customizes-Cap-Khaki-4.jpg",
-                    "https://i.postimg.cc/pXrxN5mt/Customizes-Cap-Khaki-5.jpg"
-                ],
+        sizes: ["S", "M", "L", "XL"],
+        stock: 15,
+        deliveryFree: true
+    },
+    {
+        id: 2,
+        title: "Khaki Cap",
+        slug: "khaki-cap",
+        price: 599,
+        originalPrice: 799,
+        image: "https://i.postimg.cc/Wpf7bxtX/Khaki-Cap-9.png",
+        images: [
+            "https://i.postimg.cc/dVJ1TV1H/Customizes-Cap-Khaki-2.jpg",
+            "https://i.postimg.cc/wMTzj7FL/Customizes-Cap-Khaki-3.jpg",
+            "https://i.postimg.cc/FzRtQwsx/Customizes-Cap-Khaki-4.jpg",
+            "https://i.postimg.cc/pXrxN5mt/Customizes-Cap-Khaki-5.jpg"
+        ],
                 description: "Comfortable and stylish men's casual t-shirt made from 100% cotton. Available in various colors and sizes.",
                 colors: ["Red", "Blue", "Black", "White", "Green"],
                 colorImages: {
@@ -63,9 +62,8 @@
                     "White": "#ffffff",
                     "Green": "Green"
                 },
-                sizes: ["S", "M", "L","XXL","XXL",],
-                stock: 07,
-                deliveryFree: false
-            },
-   
+        sizes: ["S", "M", "L"],
+        stock: 8,
+        deliveryFree: false
+    },
         ];
