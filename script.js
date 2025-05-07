@@ -1170,3 +1170,262 @@
         
         window.scrollTo(0, 0);
     }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+// URL হ্যান্ডলিং ফাংশন
+function handleHashChange() {
+    const hash = window.location.hash.substring(1);
+    
+    if (!hash) {
+        switchView('products');
+        return;
+    }
+    
+    // Parse the URL parameters
+    const params = new URLSearchParams(hash.split('?')[1] || '');
+    const productSlug = hash.split('?')[0];
+    const color = params.get('color') || null;
+    const size = params.get('size') || null;
+    
+    const product = products.find(p => p.slug === productSlug);
+    if (product) {
+        selectedProduct = product;
+        loadProductDetail(product);
+        
+        // Set selected color and size from URL if available
+        if (color) {
+            selectedColor = color;
+            setTimeout(() => {
+                const colorOption = [...document.querySelectorAll('#color-options .variant-option')]
+                    .find(opt => opt.textContent === color);
+                if (colorOption) colorOption.click();
+                
+                const colorSwatch = [...document.querySelectorAll('.color-swatch')]
+                    .find(sw => sw.title === color);
+                if (colorSwatch) colorSwatch.click();
+            }, 100);
+        }
+        
+        if (size) {
+            selectedSize = size;
+            setTimeout(() => {
+                const sizeOption = [...document.querySelectorAll('#size-options .variant-option')]
+                    .find(opt => opt.textContent === size);
+                if (sizeOption) sizeOption.click();
+            }, 100);
+        }
+        
+        switchView('detail');
+    } else {
+        switchView('products');
+    }
+}
+
+// প্রোডাক্ট ডিটেইল লোড করার ফাংশন
+function loadProductDetail(product) {
+    document.getElementById('detail-title').textContent = product.title;
+    document.getElementById('detail-price').textContent = `৳${product.price}`;
+    document.getElementById('detail-original-price').textContent = `৳${product.originalPrice}`;
+    document.getElementById('detail-description').textContent = product.description;
+    
+    // মেইন ইমেজ সেট করা
+    const mainImage = document.getElementById('detail-main-image');
+    mainImage.src = product.image;
+    mainImage.alt = product.title;
+    
+    // থাম্বনেইল কন্টেইনার ক্লিয়ার করা
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    thumbnailContainer.innerHTML = '';
+    
+    // মেইন ইমেজকে প্রথম থাম্বনেইল হিসেবে যোগ করা
+    const mainThumbnail = document.createElement('img');
+    mainThumbnail.src = product.image;
+    mainThumbnail.alt = product.title;
+    mainThumbnail.className = 'thumbnail active';
+    mainThumbnail.addEventListener('click', () => {
+        mainImage.src = product.image;
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        mainThumbnail.classList.add('active');
+    });
+    thumbnailContainer.appendChild(mainThumbnail);
+    
+    // অন্যান্য ইমেজ যোগ করা
+    product.images.forEach((image, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = image;
+        thumbnail.alt = `${product.title} - Image ${index + 1}`;
+        thumbnail.className = 'thumbnail';
+        
+        thumbnail.addEventListener('click', () => {
+            mainImage.src = image;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        });
+        
+        thumbnailContainer.appendChild(thumbnail);
+    });
+    
+    // কালার অপশন সেট করা
+    const colorOptions = document.getElementById('color-options');
+    colorOptions.innerHTML = '';
+    
+    const colorSwatches = document.getElementById('color-swatches');
+    colorSwatches.innerHTML = '';
+    
+    product.colors.forEach(color => {
+        // টেক্সট কালার অপশন
+        const colorOption = document.createElement('div');
+        colorOption.className = 'variant-option';
+        colorOption.textContent = color;
+        
+        colorOption.addEventListener('click', () => {
+            document.querySelectorAll('#color-options .variant-option').forEach(o => o.classList.remove('selected'));
+            colorOption.classList.add('selected');
+            selectedColor = color;
+            updateProductURL();
+            
+            if (product.colorImages && product.colorImages[color]) {
+                mainImage.src = product.colorImages[color];
+                document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
+                    if (index === 0) thumb.src = product.colorImages[color];
+                });
+            }
+        });
+        
+        // If this color is selected from URL, mark it as selected
+        if (color === selectedColor) {
+            colorOption.classList.add('selected');
+        }
+        
+        colorOptions.appendChild(colorOption);
+        
+        // কালার সোয়াচ
+        if (product.colorCodes && product.colorCodes[color]) {
+            const colorSwatch = document.createElement('div');
+            colorSwatch.className = 'color-swatch';
+            colorSwatch.style.backgroundColor = product.colorCodes[color];
+            colorSwatch.title = color;
+            
+            colorSwatch.addEventListener('click', () => {
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+                colorSwatch.classList.add('selected');
+                selectedColor = color;
+                updateProductURL();
+                
+                if (product.colorImages && product.colorImages[color]) {
+                    mainImage.src = product.colorImages[color];
+                    document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
+                        if (index === 0) thumb.src = product.colorImages[color];
+                    });
+                }
+            });
+            
+            // If this color is selected from URL, mark it as selected
+            if (color === selectedColor) {
+                colorSwatch.classList.add('selected');
+            }
+            
+            colorSwatches.appendChild(colorSwatch);
+        }
+    });
+    
+    // সাইজ অপশন সেট করা
+    const sizeOptions = document.getElementById('size-options');
+    sizeOptions.innerHTML = '';
+    
+    product.sizes.forEach(size => {
+        const sizeOption = document.createElement('div');
+        sizeOption.className = 'variant-option';
+        sizeOption.textContent = size;
+        
+        sizeOption.addEventListener('click', () => {
+            document.querySelectorAll('#size-options .variant-option').forEach(o => o.classList.remove('selected'));
+            sizeOption.classList.add('selected');
+            selectedSize = size;
+            updateProductURL();
+        });
+        
+        // If this size is selected from URL, mark it as selected
+        if (size === selectedSize) {
+            sizeOption.classList.add('selected');
+        }
+        
+        sizeOptions.appendChild(sizeOption);
+    });
+    
+    // কোয়ান্টিটি রিসেট করা
+    document.getElementById('quantity-input').value = 1;
+    
+    // ফ্রি ডেলিভারি অপশন
+    if (product.deliveryFree) {
+        freeDeliveryOption.style.display = 'block';
+        document.querySelector('input[name="product-delivery"][value="free"]').checked = true;
+    } else {
+        freeDeliveryOption.style.display = 'none';
+        document.querySelector('input[name="product-delivery"][value="inside"]').checked = true;
+    }
+    
+    updateProductOrderSummary();
+    showRelatedProducts(product.id);
+    setupImageZoom();
+}
+
+// URL আপডেট করার ফাংশন
+function updateProductURL() {
+    if (!selectedProduct) return;
+    
+    const params = new URLSearchParams();
+    if (selectedColor) params.set('color', selectedColor);
+    if (selectedSize) params.set('size', selectedSize);
+    
+    const queryString = params.toString();
+    const newHash = `#${selectedProduct.slug}${queryString ? `?${queryString}` : ''}`;
+    
+    // Update URL without reloading the page
+    window.history.replaceState({}, '', newHash);
+}
+
+// showProductDetail ফাংশন আপডেট করুন
+function showProductDetail(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    // Reset selected variants
+    selectedColor = null;
+    selectedSize = null;
+    
+    // Update URL
+    window.history.pushState({ productId }, '', `#${product.slug}`);
+    
+    // প্রোডাক্ট ডিটেইল লোড করুন
+    selectedProduct = product;
+    loadProductDetail(product);
+    switchView('detail');
+}
+
+// init ফাংশন আপডেট করুন
+function init() {
+    renderProducts();
+    setupEventListeners();
+    updateCartCount();
+    setupChatbox();
+    
+    // URL চেক করুন
+    handleHashChange();
+    
+    // হ্যাশ চেঞ্জ ইভেন্ট লিসেনার যোগ করুন
+    window.addEventListener('hashchange', handleHashChange);
+}
+
+// back-to-products বাটনের ইভেন্ট লিসেনার আপডেট করুন
+backToProducts.addEventListener('click', () => {
+    window.history.pushState({}, '', window.location.pathname);
+    switchView('products');
+});
