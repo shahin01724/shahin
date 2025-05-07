@@ -516,22 +516,52 @@
             updateOrderSummary();
         }
 
-        // Buy now function
-        function buyNow(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            // Show product detail and order form
-            showProductDetail(productId);
-            
-            setTimeout(() => {
-                document.getElementById('product-order-form').style.display = 'block';
-            }, 100);
-            
-            // Hide floating cart
-            floatingCart.classList.add('hidden');
-            updateCartCount();
-        }
+// Buy now function
+function buyNow(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    // Add to cart with selected variants
+    const quantity = parseInt(document.getElementById('quantity-input').value);
+    
+    // Determine which image to use
+    let productImage = product.image;
+    if (selectedColor && product.colorImages && product.colorImages[selectedColor]) {
+        productImage = product.colorImages[selectedColor];
+    }
+    
+    // Clear cart and add only this product
+    cart = [{
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: productImage,
+        color: selectedColor,
+        size: selectedSize,
+        quantity: quantity,
+        deliveryFree: product.deliveryFree
+    }];
+    
+    // Update URL with product slug and selected variants
+    const params = new URLSearchParams();
+    if (selectedColor) params.set('color', selectedColor);
+    if (selectedSize) params.set('size', selectedSize);
+    
+    const queryString = params.toString();
+    window.history.pushState({}, '', `#${product.slug}${queryString ? `?${queryString}` : ''}`);
+    
+    // Show product detail and order form
+    selectedProduct = product;
+    loadProductDetail(product);
+    
+    setTimeout(() => {
+        document.getElementById('product-order-form').style.display = 'block';
+    }, 100);
+    
+    // Update cart count and hide floating cart
+    updateCartCount();
+    floatingCart.classList.add('hidden');
+}
 
         // Update product order summary
         function updateProductOrderSummary() {
