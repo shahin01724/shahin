@@ -666,128 +666,201 @@
     <script src="product.js"></script>
 	
 <script>
-// Add this at the top of your script.js
+// Cart data এবং অন্যান্য ভ্যারিয়েবল ডিক্লেয়ারেশন এখানে থাকবে...
+
+// প্রোডাক্ট স্লাগ জেনারেটর ফাংশন
 function generateSlug(title) {
     return title.toLowerCase()
-        .replace(/[^\w\s-]/g, '') // Remove special chars
-        .replace(/\s+/g, '-') // Replace spaces with -
-        .replace(/-+/g, '-') // Replace multiple - with single -
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
         .trim();
 }
 
-// Update your products array to include slugs (you can do this in product.js)
-// Example:
-// const products = [
-//     {
-//         id: 1,
-//         title: "Men's Casual T-Shirt",
-//         slug: generateSlug("Men's Casual T-Shirt"),
-//         ...
-//     },
-//     ...
-// ];
-
-// Modify showProductDetail function
-function showProductDetail(productId) {
-    selectedProduct = products.find(p => p.id === productId);
-    if (!selectedProduct) return;
+// URL হ্যান্ডলিং ফাংশন
+function handleHashChange() {
+    const hash = window.location.hash.substring(1);
     
-    // Update URL without reload
-    const productSlug = generateSlug(selectedProduct.title);
-    window.history.pushState({ productId }, '', `#${productSlug}`);
+    if (!hash) {
+        switchView('products');
+        return;
+    }
     
-    // Rest of your existing showProductDetail code...
-    document.getElementById('detail-title').textContent = selectedProduct.title;
-    document.getElementById('detail-price').textContent = `৳${selectedProduct.price}`;
-    // ... continue with the rest of your function
+    const product = products.find(p => generateSlug(p.title) === hash);
+    if (product) {
+        selectedProduct = product;
+        loadProductDetail(product);
+        switchView('detail');
+    } else {
+        switchView('products');
+    }
 }
 
-// Add URL handling at initialization
+// প্রোডাক্ট ডিটেইল লোড করার ফাংশন
+function loadProductDetail(product) {
+    document.getElementById('detail-title').textContent = product.title;
+    document.getElementById('detail-price').textContent = `৳${product.price}`;
+    document.getElementById('detail-original-price').textContent = `৳${product.originalPrice}`;
+    document.getElementById('detail-description').textContent = product.description;
+    
+    // মেইন ইমেজ সেট করা
+    const mainImage = document.getElementById('detail-main-image');
+    mainImage.src = product.image;
+    mainImage.alt = product.title;
+    
+    // থাম্বনেইল কন্টেইনার ক্লিয়ার করা
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    thumbnailContainer.innerHTML = '';
+    
+    // মেইন ইমেজকে প্রথম থাম্বনেইল হিসেবে যোগ করা
+    const mainThumbnail = document.createElement('img');
+    mainThumbnail.src = product.image;
+    mainThumbnail.alt = product.title;
+    mainThumbnail.className = 'thumbnail active';
+    mainThumbnail.addEventListener('click', () => {
+        mainImage.src = product.image;
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        mainThumbnail.classList.add('active');
+    });
+    thumbnailContainer.appendChild(mainThumbnail);
+    
+    // অন্যান্য ইমেজ যোগ করা
+    product.images.forEach((image, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = image;
+        thumbnail.alt = `${product.title} - Image ${index + 1}`;
+        thumbnail.className = 'thumbnail';
+        
+        thumbnail.addEventListener('click', () => {
+            mainImage.src = image;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        });
+        
+        thumbnailContainer.appendChild(thumbnail);
+    });
+    
+    // কালার অপশন সেট করা
+    const colorOptions = document.getElementById('color-options');
+    colorOptions.innerHTML = '';
+    
+    const colorSwatches = document.getElementById('color-swatches');
+    colorSwatches.innerHTML = '';
+    
+    product.colors.forEach(color => {
+        // টেক্সট কালার অপশন
+        const colorOption = document.createElement('div');
+        colorOption.className = 'variant-option';
+        colorOption.textContent = color;
+        
+        colorOption.addEventListener('click', () => {
+            document.querySelectorAll('#color-options .variant-option').forEach(o => o.classList.remove('selected'));
+            colorOption.classList.add('selected');
+            selectedColor = color;
+            
+            if (product.colorImages && product.colorImages[color]) {
+                mainImage.src = product.colorImages[color];
+                document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
+                    if (index === 0) thumb.src = product.colorImages[color];
+                });
+            }
+        });
+        
+        colorOptions.appendChild(colorOption);
+        
+        // কালার সোয়াচ
+        if (product.colorCodes && product.colorCodes[color]) {
+            const colorSwatch = document.createElement('div');
+            colorSwatch.className = 'color-swatch';
+            colorSwatch.style.backgroundColor = product.colorCodes[color];
+            colorSwatch.title = color;
+            
+            colorSwatch.addEventListener('click', () => {
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+                colorSwatch.classList.add('selected');
+                selectedColor = color;
+                
+                if (product.colorImages && product.colorImages[color]) {
+                    mainImage.src = product.colorImages[color];
+                    document.querySelectorAll('.thumbnail').forEach((thumb, index) => {
+                        if (index === 0) thumb.src = product.colorImages[color];
+                    });
+                }
+            });
+            
+            colorSwatches.appendChild(colorSwatch);
+        }
+    });
+    
+    // সাইজ অপশন সেট করা
+    const sizeOptions = document.getElementById('size-options');
+    sizeOptions.innerHTML = '';
+    
+    product.sizes.forEach(size => {
+        const sizeOption = document.createElement('div');
+        sizeOption.className = 'variant-option';
+        sizeOption.textContent = size;
+        
+        sizeOption.addEventListener('click', () => {
+            document.querySelectorAll('#size-options .variant-option').forEach(o => o.classList.remove('selected'));
+            sizeOption.classList.add('selected');
+            selectedSize = size;
+        });
+        
+        sizeOptions.appendChild(sizeOption);
+    });
+    
+    // কোয়ান্টিটি রিসেট করা
+    document.getElementById('quantity-input').value = 1;
+    
+    // ফ্রি ডেলিভারি অপশন
+    if (product.deliveryFree) {
+        freeDeliveryOption.style.display = 'block';
+        document.querySelector('input[name="product-delivery"][value="free"]').checked = true;
+    } else {
+        freeDeliveryOption.style.display = 'none';
+        document.querySelector('input[name="product-delivery"][value="inside"]').checked = true;
+    }
+    
+    updateProductOrderSummary();
+    showRelatedProducts(product.id);
+    setupImageZoom();
+}
+
+// showProductDetail ফাংশন আপডেট করুন
+function showProductDetail(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    // URL আপডেট করুন
+    const productSlug = generateSlug(product.title);
+    window.history.pushState({ productId }, '', `#${productSlug}`);
+    
+    // প্রোডাক্ট ডিটেইল লোড করুন
+    selectedProduct = product;
+    loadProductDetail(product);
+    switchView('detail');
+}
+
+// init ফাংশন আপডেট করুন
 function init() {
     renderProducts();
     setupEventListeners();
     updateCartCount();
     setupChatbox();
     
-    // Check URL hash on load
+    // URL চেক করুন
     handleHashChange();
     
-    // Listen for hash changes
+    // হ্যাশ চেঞ্জ ইভেন্ট লিসেনার যোগ করুন
     window.addEventListener('hashchange', handleHashChange);
 }
 
-function handleHashChange() {
-    const hash = window.location.hash.substring(1); // Remove #
-    
-    if (!hash) {
-        // No hash = show products view
-        switchView('products');
-        return;
-    }
-    
-    // Find product by slug
-    const product = products.find(p => generateSlug(p.title) === hash);
-    if (product) {
-        showProductDetail(product.id);
-    } else {
-        // If no product found, default to products view
-        switchView('products');
-    }
-}
-
-// Update your existing switchView function to maintain the hash
-function switchView(view) {
-    currentView = view;
-    
-    document.getElementById('products-view').style.display = 'none';
-    productDetail.classList.remove('active');
-    checkoutForm.classList.remove('active');
-    orderProcessing.classList.remove('active');
-    orderConfirmation.classList.remove('active');
-    
-    // Hide banner, features and footer sections by default
-    document.querySelector('.banner').style.display = 'none';
-    document.querySelector('.features').style.display = 'none';
-    document.querySelector('footer').style.display = 'none';
-    
-    // Chatbox will always remain visible
-    document.querySelector('.chatbox').style.display = 'block';
-    
-    productOrderForm.style.display = 'none';
-    
-    switch (view) {
-        case 'products':
-            document.getElementById('products-view').style.display = 'block';
-            floatingCart.classList.remove('hidden');
-            // Show banner, features and footer only on home/products view
-            document.querySelector('.banner').style.display = 'block';
-            document.querySelector('.features').style.display = 'flex';
-            document.querySelector('footer').style.display = 'block';
-            // Clear hash when showing products view
-            if (window.location.hash) {
-                window.history.pushState({}, '', window.location.pathname);
-            }
-            break;
-        case 'detail':
-            productDetail.classList.add('active');
-            floatingCart.classList.remove('hidden');
-            break;
-        case 'checkout':
-            checkoutForm.classList.add('active');
-            floatingCart.classList.add('hidden');
-            break;
-        case 'processing':
-            orderProcessing.classList.add('active');
-            floatingCart.classList.add('hidden');
-            break;
-        case 'confirmation':
-            orderConfirmation.classList.add('active');
-            floatingCart.classList.add('hidden');
-            break;
-    }
-    
-    window.scrollTo(0, 0);
-}
+// back-to-products বাটনের ইভেন্ট লিসেনার আপডেট করুন
+backToProducts.addEventListener('click', () => {
+    window.history.pushState({}, '', window.location.pathname);
+    switchView('products');
+});
 </script>
 	
 	
