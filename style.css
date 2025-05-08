@@ -258,7 +258,7 @@ header {
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://www.zoofashions.com/cdn/shop/articles/Blog-Caps-Banner-1.jpg?v=1657906097');
     background-size: cover;
     background-position: center;
     color: white;
@@ -944,7 +944,6 @@ header {
 @media (max-width: 576px) {
     .btn {
         padding: 8px 0px;
-		font-size: 10px;
     }
 }
 
@@ -1922,3 +1921,11 @@ footer {
         padding: 10px;
     }
 }
+
+.chatbox-input textarea {
+    width: 100%;
+    box-sizing: border-box; /* padding এবং border বাদ দিয়ে 100% বজায় রাখে */
+    padding: 10px;
+    font-size: 16px;
+    resize: vertical; /* চাইলে resize বন্ধ করতে পারেন */
+    }
