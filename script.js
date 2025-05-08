@@ -1697,3 +1697,47 @@ backToProducts.addEventListener('click', () => {
     switchView('products');
 });
 
+// Back to products button - Final version
+backToProducts.addEventListener('click', function() {
+    // Reset selected variants
+    selectedColor = null;
+    selectedSize = null;
+    window.history.pushState({}, '', window.location.pathname);
+    switchView('products');
+});
+
+// showProductDetail ফাংশনে পরিবর্তন
+function showProductDetail(productId) {
+    // Reset selected variants
+    selectedColor = null;
+    selectedSize = null;
+    
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    // Update URL
+    window.history.pushState({ productId }, '', `#${product.slug}`);
+    
+    // Load product detail
+    selectedProduct = product;
+    loadProductDetail(product);
+    switchView('detail');
+}
+
+
+// Back to product after checkout cart clear
+clearCartBtn.addEventListener('click', () => {
+    cart = [];
+    updateCartCount();
+    updateOrderSummary();
+    // Redirect to products page
+    switchView('products');
+});
+
+clearCartBtnFloating.addEventListener('click', () => {
+    cart = [];
+    updateCartCount();
+    updateOrderSummary();
+    // Redirect to products page
+    switchView('products');
+});
