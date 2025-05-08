@@ -544,21 +544,21 @@
         </div>
         <div class="chatbox-content" id="chatbox-content">
             <div class="chatbox-header">
-                <h3>Customer Support</h3>
+                <h3>কাস্টোমার সাপোর্ট</h3>
                 <button class="chatbox-close" id="chatbox-close"><i class="fas fa-times"></i></button>
             </div>
             <div class="chatbox-body">
-                <p>Hello! How can we help you today?</p>
+                <p>আপনার কোন সাহায্যের প্রয়োজন হলে বিস্তারিত লিখে সেন্ড করুন</p>
             </div>
             <div class="chatbox-input">
-                <input type="text" id="chatbox-input" placeholder="Type your message...">
-            </div>
+				<textarea id="chatbox-input" placeholder="এখানে আপনার মেসেজ লিখুন..." rows="4"></textarea>
+			</div>
             <div class="chatbox-actions">
                 <button class="chatbox-btn chatbox-btn-whatsapp" id="send-whatsapp">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
+                    <i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপ
                 </button>
                 <button class="chatbox-btn chatbox-btn-messenger" id="send-messenger">
-                    <i class="fab fa-facebook-messenger"></i> Messenger
+                    <i class="fab fa-facebook-messenger"></i> মেসেঞ্জার
                 </button>
             </div>
         </div>
@@ -594,8 +594,8 @@
                     <p><strong>Custom Cap BD</strong></p>
                     <p>123 Business Street</p>
                     <p>Dhaka, Bangladesh</p>
-                    <p><strong>Phone:</strong> +880 1724 674681</p>
-                    <p><strong>Email:</strong> info@headlookbd.com</p>
+                    <p>Phone: +880 1724 674681</p>
+                    <p>Email: info@headlookbd.com</p>
                 </div>
                 
                 <div class="invoice-to">
@@ -611,8 +611,8 @@
             <table class="invoice-items">
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Image</th>
+                        <th>Products/Items</th>
+                        <th>Products Image</th>
                         <th>Price</th>
                         <th>Qty</th>
                         <th>Total</th>
@@ -641,7 +641,7 @@
             <div class="invoice-footer">
                 <p>Thank you for your Orders!</p>
                 <p>Please check your items before accepting the delivery.</p>
-                <p>For any queries, contact us at +880 1724 674681 or info@customcapbd.com</p>
+                <p>For any queries, contact us at +880 1724 674681 or info@headlookbd.com</p>
             </div>
             
             <div class="invoice-actions">
@@ -668,6 +668,64 @@
 	
 	   <!-- Main Products JavaScript File -->
     <script src="product.js"></script>
+	
+	<script>
+		// Invoice ডাউনলোড ফাংশন
+function downloadInvoice() {
+    try {
+        // লাইব্রেরি চেক
+        if (!window.jspdf || !window.html2canvas) {
+            throw new Error('Required libraries not loaded');
+        }
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const invoice = document.getElementById('invoice');
+
+        // অপশনস সেট করুন
+        const options = {
+            scale: 2,
+            logging: false,
+            useCORS: true,
+            scrollY: -window.scrollY
+        };
+
+        // html2canvas দিয়ে কনভার্ট করুন
+        html2canvas(invoice, options).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            pdf.save(`invoice_${Date.now()}.pdf`);
+        }).catch(err => {
+            console.error('Canvas error:', err);
+            fallbackPDF();
+        });
+
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        fallbackPDF();
+    }
+}
+
+// ফলব্যাক মেথড
+function fallbackPDF() {
+    alert('Using fallback PDF method');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    
+    pdf.text('Invoice Summary', 10, 10);
+    pdf.text(`Invoice #: ${document.getElementById('invoice-number').textContent}`, 10, 20);
+    // আরও কন্টেন্ট যোগ করুন...
+    
+    pdf.save('invoice_fallback.pdf');
+}
+
+// বাটনে ইভেন্ট বাইন্ড করুন
+document.getElementById('download-invoice').addEventListener('click', downloadInvoice);
+	</script>
+	
 	
 </body>
 </html>
