@@ -1,3 +1,70 @@
+
+		// Invoice ডাউনলোড ফাংশন
+function downloadInvoice() {
+    try {
+        // লাইব্রেরি চেক
+        if (!window.jspdf || !window.html2canvas) {
+            throw new Error('Required libraries not loaded');
+        }
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const invoice = document.getElementById('invoice');
+
+        // অপশনস সেট করুন
+        const options = {
+            scale: 2,
+            logging: false,
+            useCORS: true,
+            scrollY: -window.scrollY
+        };
+
+        // html2canvas দিয়ে কনভার্ট করুন
+        html2canvas(invoice, options).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            pdf.save(`invoice_${Date.now()}.pdf`);
+        }).catch(err => {
+            console.error('Canvas error:', err);
+            fallbackPDF();
+        });
+
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        fallbackPDF();
+    }
+}
+
+// ফলব্যাক মেথড
+function fallbackPDF() {
+    alert('Using fallback PDF method');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    
+    pdf.text('Invoice Summary', 10, 10);
+    pdf.text(`Invoice #: ${document.getElementById('invoice-number').textContent}`, 10, 20);
+    // আরও কন্টেন্ট যোগ করুন...
+    
+    pdf.save('invoice_fallback.pdf');
+}
+
+// বাটনে ইভেন্ট বাইন্ড করুন
+document.getElementById('download-invoice').addEventListener('click', downloadInvoice);
+	
+	
+	
+	
+
+
+
+
+
+
+
+
         // Cart data
         let cart = [];
         let currentView = 'products'; // products, detail, checkout, processing, confirmation
@@ -518,17 +585,35 @@
         }
 
 // Buy now function
-// Buy now function - Final version
 function buyNow(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
+    // কোয়ান্টিটি ভ্যালু নিন
+    const quantity = parseInt(document.getElementById('quantity-input').value);
+    
     // Show product detail and order form
     selectedProduct = product;
     loadProductDetail(product);
     switchView('detail');
     
+    // কালার সিলেক্ট করা থাকলে মেইন ইমেজ ও থাম্বনাইল আপডেট করুন
+    if (selectedColor && product.colorImages && product.colorImages[selectedColor]) {
+        const mainImage = document.getElementById('detail-main-image');
+        mainImage.src = product.colorImages[selectedColor];
+        
+        // প্রথম থাম্বনাইল আপডেট করুন
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        if (thumbnails.length > 0) {
+            thumbnails[0].src = product.colorImages[selectedColor];
+        }
+    }
+    
     setTimeout(() => {
+        // কোয়ান্টিটি ইনপুট ফিল্ডে ভ্যালু সেট করুন
+        document.getElementById('quantity-input').value = quantity;
+        updateProductOrderSummary();
+        
         document.getElementById('product-order-form').style.display = 'block';
         document.getElementById('product-order-form').scrollIntoView({
             behavior: 'smooth'
@@ -545,13 +630,6 @@ function buyNow(productId) {
     const queryString = params.toString();
     window.history.pushState({}, '', `#${product.slug}${queryString ? `?${queryString}` : ''}`);
 }
-
-// Back to products button - Final version
-backToProducts.addEventListener('click', function() {
-    window.history.pushState({}, '', window.location.pathname);
-    switchView('products');
-});
-
 
 
         // Update product order summary
@@ -863,81 +941,6 @@ backToProducts.addEventListener('click', function() {
             
             invoiceContainer.classList.add('active');
             
-            sendDataToGoogleSheets(customerData, invoiceNumber, subtotal, deliveryCharge, total, isProductOrder);
-        }
-
-        // Send data to Google Sheets
-        function sendDataToGoogleSheets(customerData, invoiceNumber, subtotal, deliveryCharge, total, isProductOrder = false) {
-            const formData = {
-                timestamp: new Date().toISOString(),
-                invoiceNumber: invoiceNumber,
-                name: customerData.name,
-                mobile: customerData.mobile,
-                address: customerData.address,
-                district: customerData.district,
-                email: customerData.email || 'N/A',
-                deliveryOption: customerData.delivery === 'free' ? 'Free Delivery' : 
-                              (customerData.delivery === 'inside' ? 'Inside Dhaka' : 'Outside Dhaka'),
-                notes: customerData.notes || 'N/A',
-                subtotal: subtotal,
-                deliveryCharge: deliveryCharge,
-                total: total,
-                items: isProductOrder ? [{
-                    title: selectedProduct.title,
-                    image: selectedColor && selectedProduct.colorImages && selectedProduct.colorImages[selectedColor] ? 
-                          selectedProduct.colorImages[selectedColor] : selectedProduct.image,
-                    color: selectedColor || 'Default',
-                    size: selectedSize || 'One Size',
-                    price: selectedProduct.price,
-                    quantity: parseInt(document.getElementById('quantity-input').value),
-                    total: selectedProduct.price * parseInt(document.getElementById('quantity-input').value)
-                }] : cart.map(item => ({
-                    title: item.title,
-                    image: item.image,
-                    color: item.color || 'Default',
-                    size: item.size || 'One Size',
-                    price: item.price,
-                    quantity: item.quantity,
-                    total: item.price * item.quantity
-                }))
-            };
-            
-            const webAppUrl = 'https://script.google.com/macros/s/AKfycby5bXBbKQmMxg52lLv1KUaixyx8JDxr3ucchfDKjDWMbZpijX_eTM6PyTMtoUVMubjN/exec';
-            
-            fetch(webAppUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Order saved to Google Sheet:', data);
-            })
-            .catch(error => {
-                console.error('Error saving order:', error);
-            });
-        }
-
-        // Save invoice as PDF
-        function saveInvoiceAsPDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'pt', 'a4');
-            
-            html2canvas(document.getElementById('invoice'), {
-                scale: 2,
-                logging: false,
-                useCORS: true,
-                allowTaint: true
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                const imgWidth = pdf.internal.pageSize.getWidth();
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                
-                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-                pdf.save(`invoice_${document.getElementById('invoice-number').textContent}.pdf`);
-            });
         }
 
         // Save invoice as JPG
@@ -1741,3 +1744,255 @@ clearCartBtnFloating.addEventListener('click', () => {
     // Redirect to products page
     switchView('products');
 });
+
+	// Save invoice as PDF (updated version)
+
+function saveInvoiceAsPDF() {
+    try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const invoice = document.getElementById('invoice');
+        
+        // Clone the invoice element to avoid affecting the original
+        const invoiceClone = invoice.cloneNode(true);
+        invoiceClone.style.position = 'absolute';
+        invoiceClone.style.left = '-9999px';
+        document.body.appendChild(invoiceClone);
+        
+        // Hide buttons in the clone
+        const buttons = invoiceClone.querySelector('.invoice-actions');
+        if (buttons) buttons.style.display = 'none';
+        
+        // Set options for html2canvas
+        const options = {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: true,
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: invoiceClone.scrollWidth,
+            windowHeight: invoiceClone.scrollHeight
+        };
+
+        html2canvas(invoiceClone, options).then(canvas => {
+            // Remove the clone
+            document.body.removeChild(invoiceClone);
+            
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = pdf.internal.pageSize.getWidth() - 20; // 10px margins
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+            pdf.save(`invoice_${document.getElementById('invoice-number').textContent}.pdf`);
+        }).catch(error => {
+            console.error('Error generating PDF:', error);
+            document.body.removeChild(invoiceClone);
+            // Fallback method
+            fallbackPDF();
+        });
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        fallbackPDF();
+    }
+}
+
+function downloadInvoicePDF() {
+    const invoice = document.getElementById('invoice'); // আপনার ইনভয়েস অংশ
+
+    const opt = {
+        margin: 0,
+        filename: 'Invoice-' + Date.now() + '.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true
+        },
+        jsPDF: {
+            unit: 'in',
+            format: 'a4',
+            orientation: 'portrait'
+        }
+    };
+
+    html2pdf().set(opt).from(invoice).save();
+}
+
+// -------------------------------------------------------------
+
+
+// Google Sheet এ ডাটা সাবমিট করার ফাংশন
+
+document.getElementById('product-customer-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const invoiceNumber = 'INV-' + Date.now();
+    const name = document.getElementById('product-full-name').value;
+    const mobile = document.getElementById('product-mobile').value;
+    const address = document.getElementById('product-address').value;
+    const district = document.getElementById('product-district').value;
+    const email = document.getElementById('product-email').value;
+    const notes = document.getElementById('product-notes').value;
+    const quantity = document.getElementById('quantity-input').value;
+    const deliveryOption = document.querySelector('input[name="product-delivery"]:checked').value;
+
+    const deliveryCost = deliveryOption === 'free' ? 'Free' : (district.toLowerCase() === 'dhaka' || district === 'ঢাকা' ? 80 : 120);
+    const total = selectedProduct.price * quantity + (deliveryCost === 'Free' ? 0 : deliveryCost);
+
+    const productData = {
+        invoiceNumber,
+        name,
+        mobile,
+        address,
+        district,
+        email,
+        notes,
+        quantity,
+        productName: selectedProduct.title,
+        productPrice: selectedProduct.price,
+        color: selectedColor || '',
+        size: selectedSize || '',
+        deliveryCost,
+        totalPrice: total,
+        imageURL: selectedColor && selectedProduct.colorImages ? selectedProduct.colorImages[selectedColor] : selectedProduct.image,
+        timestamp: new Date().toLocaleString('en-BD', { timeZone: 'Asia/Dhaka' })
+    };
+
+    try {
+        const res = await fetch('https://script.google.com/macros/s/AKfycbxBb-AyTmNPEW9-01HGTR0oqSuhXZgYh7J-DRwSpzAImGJQ8woM9txMmCaaXGcsl1eH/exec', {
+            method: 'POST',
+            body: new URLSearchParams(productData),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+
+        const result = await res.json();
+
+        if (result.result === 'success') {
+            switchView('processing');
+            setTimeout(() => switchView('confirmation'), 4000);
+        } else {
+            alert(result.message || 'Order submission failed.');
+        }
+    } catch (error) {
+        alert('অর্ডার সাবমিটে সমস্যা হয়েছে: ' + error.message);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById('customer-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const invoiceNumber = 'INV-' + Date.now();
+    const name = document.getElementById('full-name').value;
+    const mobile = document.getElementById('mobile').value;
+    const address = document.getElementById('address').value;
+    const district = document.getElementById('district').value;
+    const email = document.getElementById('email').value;
+    const notes = document.getElementById('notes').value;
+    const deliveryOption = document.querySelector('input[name="delivery"]:checked').value;
+    const deliveryCost = deliveryOption === 'free' ? 'Free' : (district.toLowerCase() === 'dhaka' || district === 'ঢাকা' ? 80 : 120);
+
+    let total = 0;
+    const productNames = [];
+    const productPrices = [];
+    const quantities = [];
+    const colors = [];
+    const sizes = [];
+    const imageURLs = [];
+
+    for (const item of cart) {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        productNames.push(item.title);
+        productPrices.push(item.price);
+        quantities.push(item.quantity);
+        colors.push(item.color || '');
+        sizes.push(item.size || '');
+        imageURLs.push(item.image);
+    }
+
+    total += (deliveryCost === 'Free' ? 0 : deliveryCost);
+
+    const formData = {
+        invoiceNumber,
+        name,
+        mobile,
+        address,
+        district,
+        email,
+        notes,
+        productName: productNames.join(', '),
+        productPrice: productPrices.join(', '),
+        quantity: quantities.join(', '),
+        color: colors.join(', '),
+        size: sizes.join(', '),
+        deliveryCost,
+        totalPrice: total,
+        imageURL: imageURLs.join(', '),
+        timestamp: new Date().toLocaleString('en-BD', { timeZone: 'Asia/Dhaka' })
+    };
+
+    try {
+        const res = await fetch('https://script.google.com/macros/s/AKfycbxBb-AyTmNPEW9-01HGTR0oqSuhXZgYh7J-DRwSpzAImGJQ8woM9txMmCaaXGcsl1eH/exec', {
+            method: 'POST',
+            body: new URLSearchParams(formData),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+
+        const result = await res.json();
+
+        if (result.result === 'success') {
+            switchView('processing');
+            setTimeout(() => switchView('confirmation'), 4000);
+            cart = [];
+            updateCartCount();
+        } else {
+            alert(result.message || 'Order submission failed.');
+        }
+    } catch (error) {
+        alert('অর্ডার সাবমিটে সমস্যা হয়েছে: ' + error.message);
+    }
+});
+
+
+
+
