@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Ecommerce Shop</title>
+    <title>HeadLook BD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-	<!-- Add these in head section -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- index.html এর head সেকশনে নিশ্চিত করুন এই স্ক্রিপ্টগুলো আছে -->
+<!-- Add in your HTML file: -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 </head>
 <body>
     <!-- Header Section -->
@@ -398,8 +399,9 @@
                 <button class="btn btn-primary" id="back-to-home">
                     <i class="fas fa-home"></i> Back to Home
                 </button>
-                <button class="btn btn-success" id="download-invoice">
-                    <i class="fas fa-download"></i> Download Invoice
+				<button id="download-btn" onclick="downloadInvoicePDF()">Download Invoice</button>
+                <button style="visibility: hidden; position: absolute;" class="btn btn-success" id="download-invoice">
+                    
                 </button>
             </div>
         </div>
@@ -668,64 +670,6 @@
 	
 	   <!-- Main Products JavaScript File -->
     <script src="product.js"></script>
-	
-	<script>
-		// Invoice ডাউনলোড ফাংশন
-function downloadInvoice() {
-    try {
-        // লাইব্রেরি চেক
-        if (!window.jspdf || !window.html2canvas) {
-            throw new Error('Required libraries not loaded');
-        }
-
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'pt', 'a4');
-        const invoice = document.getElementById('invoice');
-
-        // অপশনস সেট করুন
-        const options = {
-            scale: 2,
-            logging: false,
-            useCORS: true,
-            scrollY: -window.scrollY
-        };
-
-        // html2canvas দিয়ে কনভার্ট করুন
-        html2canvas(invoice, options).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const imgWidth = pdf.internal.pageSize.getWidth();
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-            pdf.save(`invoice_${Date.now()}.pdf`);
-        }).catch(err => {
-            console.error('Canvas error:', err);
-            fallbackPDF();
-        });
-
-    } catch (error) {
-        console.error('PDF generation error:', error);
-        fallbackPDF();
-    }
-}
-
-// ফলব্যাক মেথড
-function fallbackPDF() {
-    alert('Using fallback PDF method');
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-    
-    pdf.text('Invoice Summary', 10, 10);
-    pdf.text(`Invoice #: ${document.getElementById('invoice-number').textContent}`, 10, 20);
-    // আরও কন্টেন্ট যোগ করুন...
-    
-    pdf.save('invoice_fallback.pdf');
-}
-
-// বাটনে ইভেন্ট বাইন্ড করুন
-document.getElementById('download-invoice').addEventListener('click', downloadInvoice);
-	</script>
-	
 	
 </body>
 </html>
