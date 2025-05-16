@@ -1,4 +1,4 @@
-// Sample product data with color images and free delivery flag
+	// Sample product data with color images and free delivery flag
 const products = [
     {
         id: 1,
