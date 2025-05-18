@@ -1,7 +1,7 @@
 	// Sample product data with color images and free delivery flag
 const products = [
     {
-        id: 1,
+        id: 2,
         title: "Black Color Cap",
         slug: "black-color-cap",
         price: 599,
@@ -34,9 +34,9 @@ const products = [
         deliveryFree: true
     },
     {
-        id: 2,
-        title: "Khaki Cap",
-        slug: "khaki-cap",
+        id: 1,
+        title: "Khaki Color Premium Cap",
+        slug: "khaki-Color-Premium-cap",
         price: 599,
         originalPrice: 799,
         image: "https://i.postimg.cc/Wpf7bxtX/Khaki-Cap-9.png",
@@ -63,7 +63,7 @@ const products = [
             "Green": "#00ff00"
         },
         sizes: ["S", "M", "L"],
-        stock: 8,
+        stock: 1,
         deliveryFree: false
     }
 ];
