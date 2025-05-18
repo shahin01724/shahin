@@ -226,14 +226,23 @@ document.getElementById('download-invoice').addEventListener('click', downloadIn
                 buyNowBtn.className = 'btn btn-success';
                 buyNowBtn.innerHTML = '<i class="fas fa-bolt"></i> Buy Now';
                 buyNowBtn.addEventListener('click', () => buyNow(product.id));
-                
-                // Disable buttons if stock is low
-                if (product.stock <= 5) {
-                    addToCartBtn.disabled = true;
-                    buyNowBtn.disabled = true;
-                    addToCartBtn.classList.add('disabled');
-                    buyNowBtn.classList.add('disabled');
-                }
+				
+				// Show "Low Stock" badge if stock <= 5
+				if (product.stock <= 5 && product.stock > 0) {
+					stockBadge.textContent = `Low Stock (${product.stock})`;
+					stockBadge.classList.add('stock-low');
+				} else if (product.stock === 0) {
+					stockBadge.textContent = `Out of Stock`;
+					stockBadge.classList.add('stock-low');
+				}
+
+				// Disable buttons only if stock is 0
+				if (product.stock === 0) {
+					addToCartBtn.disabled = true;
+					buyNowBtn.disabled = true;
+					addToCartBtn.classList.add('disabled');
+					buyNowBtn.classList.add('disabled');
+				}
                 
                 productActions.appendChild(addToCartBtn);
                 productActions.appendChild(buyNowBtn);
@@ -1879,44 +1888,6 @@ document.getElementById('product-customer-form').addEventListener('submit', asyn
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 document.getElementById('customer-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -1992,7 +1963,63 @@ document.getElementById('customer-form').addEventListener('submit', async functi
         alert('অর্ডার সাবমিটে সমস্যা হয়েছে: ' + error.message);
     }
 });
+// Google Sheet এ ডাটা সাবমিট করার ফাংশন
+// -------------------------------------------------------------
 
 
-
-
+// Switch between views
+function switchView(view) {
+    currentView = view;
+    
+    document.getElementById('products-view').style.display = 'none';
+    productDetail.classList.remove('active');
+    checkoutForm.classList.remove('active');
+    orderProcessing.classList.remove('active');
+    orderConfirmation.classList.remove('active');
+    
+    // Hide banner, features and footer sections by default
+    document.querySelector('.banner').style.display = 'none';
+    document.querySelector('.features').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
+    
+    // Chatbox visibility control
+    const chatbox = document.querySelector('.chatbox');
+    if (view === 'products') {
+        // Show banner, features and footer only on home/products view
+        document.querySelector('.banner').style.display = 'block';
+        document.querySelector('.features').style.display = 'flex';
+        document.querySelector('footer').style.display = 'block';
+        // Show chatbox on products view
+        chatbox.style.display = 'block';
+    } else if (view === 'detail' || view === 'checkout' || view === 'processing' || view === 'confirmation') {
+        // Hide chatbox on detail, checkout, processing and confirmation views
+        chatbox.style.display = 'none';
+    }
+    
+    productOrderForm.style.display = 'none';
+    
+    switch (view) {
+        case 'products':
+            document.getElementById('products-view').style.display = 'block';
+            floatingCart.classList.remove('hidden');
+            break;
+        case 'detail':
+            productDetail.classList.add('active');
+            floatingCart.classList.remove('hidden');
+            break;
+        case 'checkout':
+            checkoutForm.classList.add('active');
+            floatingCart.classList.add('hidden');
+            break;
+        case 'processing':
+            orderProcessing.classList.add('active');
+            floatingCart.classList.add('hidden');
+            break;
+        case 'confirmation':
+            orderConfirmation.classList.add('active');
+            floatingCart.classList.add('hidden');
+            break;
+    }
+    
+    window.scrollTo(0, 0);
+}
